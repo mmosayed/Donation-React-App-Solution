@@ -1,26 +1,45 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Jumbo from './components/jumbo';
+import DonationList from './containers/donationlist';
+import Progress from './components/progress';
+import Form from './components/form';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: 'Go Fund Mo',
+      description: 'Send me to a beach',
+      reach: 5000,
+      donations: [
+        {name: 'John', amount: 50, caption: 'lol'}
+      ]
+    }
+  }
+
+  addDonation = (name, amount, caption) => {
+    const {donations} = this.state;
+    donations.unshift({name, amount, caption});
+    this.setState({ donations: donations });
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <>
+        <Jumbo name={this.state.name} description={this.state.description} />
+        <div className='container'>
+          <div className='row'>
+            <DonationList donations={this.state.donations} />
+            <div className='col-8'>
+              <Progress donations={this.state.donations} reach={this.state.reach} />
+              <hr />
+              <Form addDonation={this.addDonation} />
+            </div>
+          </div>
+        </div>
+      </>
     );
   }
 }
